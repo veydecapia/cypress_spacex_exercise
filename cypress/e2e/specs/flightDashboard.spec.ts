@@ -7,7 +7,7 @@ describe('Flight Dashboard', () => {
         cy.visit('/')
     });
 
-    describe.skip('Table', () => {
+    describe('Table', () => {
         it('should flight dashboard page displayed', () => {
             cy.title().should('equal', 'Flight Dashboard')
         });
@@ -17,7 +17,7 @@ describe('Flight Dashboard', () => {
             flightDashboardPage.table.should('not.be.null')
         });
 
-        it('should columns be displayed accordingly', () => {
+        it.skip('should columns be displayed accordingly', () => {
             
         });
 
