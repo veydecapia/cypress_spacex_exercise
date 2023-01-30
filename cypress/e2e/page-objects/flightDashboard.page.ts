@@ -94,13 +94,16 @@ class FlightDashboard{
      * Loops through the json file data and enters data each row
      */
     verifyFilterData = () =>{
+
         //**Loop through the json file for filtering data */
         filterData.forEach((datarow, index) =>{
             cy.log("Index row: " + index)
+            cy.intercept('GET', '/ships').as('getShips')
 
             cy.visit('/')
-            this.table.should('be.visible')
+            cy.wait('@getShips')
             
+            this.table.should('be.visible')
             //** Enter Filters based on json file data*/
                 .then(() => {
                     if (datarow.shipType != "") {
@@ -120,6 +123,8 @@ class FlightDashboard{
             //** Click Search button */
                 .then(() => {
                     this.searchButton.click()
+                    // cy.pause()
+                    cy.wait(1000)
                 })
             //** Check if expected is invalid */
                 .then(() => {
@@ -152,21 +157,19 @@ class FlightDashboard{
         const weight = filterData[index].weight
         const homePort = filterData[index].homePort
 
-
         //**Loop through each row and verify filtered data
+        cy.wait('@getShips')
         this.tableRow.each(($row) =>{
             if (shipType != "") {
                 cy.wrap($row)
                     .find('td:nth-child(1)')
                     .should('have.text', shipType)
             }
-    
             if(weight != ""){
                 cy.wrap($row)
                     .find('td:nth-child(2)')
                     .should('have.text', weight)
             }
-    
             if(homePort != ""){
                 cy.wrap($row)
                     .find('td:nth-child(3)')
@@ -175,12 +178,6 @@ class FlightDashboard{
         })
 
     }
-
-
-
-
-
-
 
 
 
