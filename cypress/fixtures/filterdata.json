@@ -1,0 +1,86 @@
+[
+    {
+        "shipType" : "",
+        "weight" : "",
+        "homePort" : "",
+        "valid": 1
+    },
+    {
+        "shipType" : "Tug",
+        "weight" : "",
+        "homePort" : "",
+        "valid": 1
+    },
+    {
+        "shipType" : "",
+        "weight" : "266712",
+        "homePort" : "",
+        "valid": 1
+    },
+    {
+        "shipType" : "",
+        "weight" : "",
+        "homePort" : "Port of Los Angeles",
+        "valid": 1
+    },
+    {
+        "shipType" : "Tug",
+        "weight" : "266712",
+        "homePort" : "",
+        "valid": 1
+    },
+    {
+        "shipType" : "Tug",
+        "weight" : "",
+        "homePort" : "Port of Los Angeles",
+        "valid": 1
+    },
+    {
+        "shipType" : "",
+        "weight" : "266712",
+        "homePort" : "Port of Los Angeles",
+        "valid": 1
+    },
+    {
+        "shipType" : "Tug",
+        "weight" : "266712",
+        "homePort" : "Port of Los Angeles",
+        "valid": 1
+    },
+    {
+        "shipType" : "Tug",
+        "weight" : "1234567890!",
+        "homePort" : "",
+        "valid": 0
+    },
+    {
+        "shipType" : "",
+        "weight" : "266712",
+        "homePort" : "This is an invalid home port!",
+        "valid": 0
+    },
+    {
+        "shipType" : "",
+        "weight" : "1234567890!",
+        "homePort" : "Port of Los Angeles",
+        "valid": 0
+    },
+    {
+        "shipType" : "",
+        "weight" : "1234567890!",
+        "homePort" : "This is an invalid home port!",
+        "valid": 0
+    },
+    {
+        "shipType" : "Tug",
+        "weight" : "266712",
+        "homePort" : "This is an invalid home port!",
+        "valid": 0
+    },
+    {
+        "shipType" : "Tug",
+        "weight" : "1234567890!",
+        "homePort" : "This is an invalid home port!",
+        "valid": 0
+    }
+]

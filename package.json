@@ -1,0 +1,17 @@
+{
+  "name": "cypress_spacex_exercise",
+  "version": "1.0.0",
+  "description": "For flight dashboard automation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "ENVIRONMENT=prod npx cypress open",
+    "dev": "ENVIRONMENT=dev npx cypress open"
+  },
+  "author": "Harvey Decapia",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^12.4.1",
+    "typescript": "^4.9.4"
+  }
+}
