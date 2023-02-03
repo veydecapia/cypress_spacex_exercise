@@ -95,7 +95,7 @@ class FlightDashboard{
             cy.log("Index row: " + index)
             cy.intercept('GET', '/ships').as('getShips')
             cy.visit('/')
-            cy.wait('@getShips')
+            cy.wait('@getShips') //TODO: Add API test
             
             this.table.should('be.visible')
             this.enterFilterData(
@@ -125,16 +125,15 @@ class FlightDashboard{
         weight: string,
         homePort: string
     ) => {
-        if (shipType != "") {
-            //Verification already done inside selectShipType
+        if(shipType) {
             this.selectShipType(shipType)
                 .should('have.text', shipType)
         }
-        if(weight != ""){
+        if(weight){
             this.weightFilterTextbox.type(weight)
                 .should('have.value', weight)
         }
-        if(homePort != ""){
+        if(homePort){
             this.homePortFilterTextbox.type(homePort)
                 .should('have.value', homePort)
         }
@@ -175,17 +174,17 @@ class FlightDashboard{
 
         //**Loop through each row and verify filtered data
         this.tableRow.each(($row) =>{
-            if (shipType != "") {
+            if (shipType) {
                 cy.wrap($row)
                     .find('td:nth-child(1)')
                     .should('have.text', shipType)
             }
-            if(weight != ""){
+            if(weight){
                 cy.wrap($row)
                     .find('td:nth-child(2)')
                     .should('have.text', weight)
             }
-            if(homePort != ""){
+            if(homePort){
                 cy.wrap($row)
                     .find('td:nth-child(3)')
                     .should('have.text', homePort)
