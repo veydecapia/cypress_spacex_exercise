@@ -49,27 +49,19 @@ class FlightDashboard{
      */
     selectShipType = (
         shipTypeName: string
-    ) => {
-        this.shipTypeCombobox.click()
+    ): Cypress.Chainable<JQuery<HTMLElement>> => {
+        return this.shipTypeCombobox.click()
             .then(() => {
 
-            this.shipTypeList.each(($ship) => {
-                const shipText = $ship.text().trim()
-    
-                if(shipText === shipTypeName){
-                    //Click the list
-                    cy.wrap($ship).click()
-                        .then(()=>{
-                        this.shipTypeCombobox
-                            .invoke('text')
-                            .then((text)=>{
-                                //Selected text should be equal to Ship type
-                                expect(text).to.equal(shipTypeName)
-                        })
-                    })
-                }
-            })
-            })
+                this.shipTypeList.each(($ship) => {
+                    const shipText = $ship.text().trim();
+                    if (shipText === shipTypeName) {
+                        //Click the list
+                        cy.wrap($ship).click();
+                        return cy.wrap($ship);
+                    }
+                });
+            });
     }
 
 
@@ -99,8 +91,7 @@ class FlightDashboard{
      */
     verifyFilterData = () =>{
 
-        //**Loop through the json file for filtering data */
-        filterData.forEach((datarow, index) =>{
+        filterData.forEach((datarow, index) =>{ //**Loop through the json file for filtering data */
             cy.log("Index row: " + index)
             cy.intercept('GET', '/ships').as('getShips')
             cy.visit('/')
@@ -136,7 +127,8 @@ class FlightDashboard{
     ) => {
         if (shipType != "") {
             //Verification already done inside selectShipType
-            this.selectShipType(shipType) 
+            this.selectShipType(shipType)
+                .should('have.text', shipType)
         }
         if(weight != ""){
             this.weightFilterTextbox.type(weight)
