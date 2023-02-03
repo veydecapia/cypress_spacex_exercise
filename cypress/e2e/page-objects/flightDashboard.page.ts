@@ -103,36 +103,21 @@ class FlightDashboard{
         filterData.forEach((datarow, index) =>{
             cy.log("Index row: " + index)
             cy.intercept('GET', '/ships').as('getShips')
-
             cy.visit('/')
             cy.wait('@getShips')
             
             this.table.should('be.visible')
-            //** Enter Filters based on json file data*/
             this.enterFilterData(
                 datarow.shipType, 
                 datarow.weight,
                 datarow.homePort
-                )
-
-            //** Click Search button */
-            this.searchButton.click()
+                ) //** Enter Filters based on json file data*/
+            
+            this.searchButton.click() //** Click Search button */
             this.table.should('be.visible')
-            cy.wait(500)
-            //TODO: Ensure the table already loads remove cy.wait
-
-            //** Check if expected is valid */
-                .then(() => {
-                    if(datarow.valid === 1){
-                        this.alertIcon.should('not.exist')
-                        this.table.should('be.visible')  
-                        this.verifyRow(index)
-                    }
-                    else{
-                        this.alertIcon.should('be.visible')
-                        this.table.should('not.exist')
-                    }
-                })
+            cy.wait(500) //TODO: Ensure the table already loads remove cy.wait
+        
+            this.verifyValidity(datarow.valid, index) //** Check if expected is valid */
         })
     }
 
@@ -163,6 +148,27 @@ class FlightDashboard{
         }
     }
 
+
+    /**
+     * @description
+     * Verifies alert icon and table visibility based on valid data
+     * @param {number} valid 
+     * @param {number} index 
+     */
+    verifyValidity = (
+        valid: number,
+        index: number
+    ) => {
+        if(valid === 1){
+            this.alertIcon.should('not.exist')
+            this.table.should('be.visible')  
+            this.verifyRow(index)
+        }
+        else{
+            this.alertIcon.should('be.visible')
+            this.table.should('not.exist')
+        }
+    }
 
     /**
      * Compares the value of the text of the cell to the expected value.
