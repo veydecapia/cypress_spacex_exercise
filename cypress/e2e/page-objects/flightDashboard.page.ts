@@ -1,4 +1,4 @@
-import cypress from "cypress";
+import { data } from "cypress/types/jquery";
 import filterData from "../../fixtures/filterdata.json";
 
 
@@ -51,27 +51,30 @@ class FlightDashboard{
         shipTypeName: string
     ) => {
         this.shipTypeCombobox.click()
+            .then(() => {
 
-        this.shipTypeList.each(($ship) => {
-            const shipText = $ship.text().trim()
-
-            if(shipText === shipTypeName){
-                //Click the list
-                cy.wrap($ship).click()
+            this.shipTypeList.each(($ship) => {
+                const shipText = $ship.text().trim()
+    
+                if(shipText === shipTypeName){
+                    //Click the list
+                    cy.wrap($ship).click()
                         .then(()=>{
-                            this.shipTypeCombobox
-                                .invoke('text')
-                                .then((text)=>{
-                                    //Selected text should be equal to Ship type
-                                    expect(text).to.equal(shipTypeName)
-                            })
+                        this.shipTypeCombobox
+                            .invoke('text')
+                            .then((text)=>{
+                                //Selected text should be equal to Ship type
+                                expect(text).to.equal(shipTypeName)
+                        })
                     })
-            }
-        })
+                }
+            })
+            })
     }
 
 
     /**
+     * @description
      * Verifies data based on the expected text
      * @param {string} text Expected value to compare
      * @param {number} column Column to check
@@ -90,6 +93,7 @@ class FlightDashboard{
 
 
     /**
+     * @description
      * Verifies data based on the json file
      * Loops through the json file data and enters data each row
      */
@@ -105,46 +109,60 @@ class FlightDashboard{
             
             this.table.should('be.visible')
             //** Enter Filters based on json file data*/
-                .then(() => {
-                    if (datarow.shipType != "") {
-                        //Verification already done inside selectShipType
-                        this.selectShipType(datarow.shipType) 
-                    }
-                    if(datarow.weight != ""){
-                        this.weightFilterTextbox.type(datarow.weight)
-                            .should('have.value', datarow.weight)
-                    }
-                    if(datarow.homePort != ""){
-                        this.homePortFilterTextbox.type(datarow.homePort)
-                            .should('have.value', datarow.homePort)
-                    }
-                })
+            this.enterFilterData(
+                datarow.shipType, 
+                datarow.weight,
+                datarow.homePort
+                )
 
             //** Click Search button */
-                .then(() => {
-                    this.searchButton.click()
-                    // cy.pause()
-                    cy.wait(1000)
-                })
-            //** Check if expected is invalid */
+            this.searchButton.click()
+            this.table.should('be.visible')
+            cy.wait(500)
+            //TODO: Ensure the table already loads remove cy.wait
+
+            //** Check if expected is valid */
                 .then(() => {
                     if(datarow.valid === 1){
                         this.alertIcon.should('not.exist')
                         this.table.should('be.visible')  
+                        this.verifyRow(index)
                     }
                     else{
                         this.alertIcon.should('be.visible')
                         this.table.should('not.exist')
                     }
                 })
-                .then(() => {
-                    if(datarow.valid === 1){
-                        this.verifyRow(index)
-                    }
-                })
-
         })
     }
+
+
+    /**
+     * @description
+     * Enters Ship filtering value based on the data passed. 
+     * @param shipType 
+     * @param weight 
+     * @param homePort 
+     */
+    enterFilterData = (
+        shipType: string,
+        weight: string,
+        homePort: string
+    ) => {
+        if (shipType != "") {
+            //Verification already done inside selectShipType
+            this.selectShipType(shipType) 
+        }
+        if(weight != ""){
+            this.weightFilterTextbox.type(weight)
+                .should('have.value', weight)
+        }
+        if(homePort != ""){
+            this.homePortFilterTextbox.type(homePort)
+                .should('have.value', homePort)
+        }
+    }
+
 
     /**
      * Compares the value of the text of the cell to the expected value.
@@ -158,7 +176,6 @@ class FlightDashboard{
         const homePort = filterData[index].homePort
 
         //**Loop through each row and verify filtered data
-        cy.wait('@getShips')
         this.tableRow.each(($row) =>{
             if (shipType != "") {
                 cy.wrap($row)
@@ -176,7 +193,6 @@ class FlightDashboard{
                     .should('have.text', homePort)
             }
         })
-
     }
 
 
