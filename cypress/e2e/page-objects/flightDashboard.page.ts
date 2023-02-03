@@ -153,9 +153,9 @@ class FlightDashboard{
             this.table.should('be.visible')  
             this.tableRow.should('have.length.greaterThan', 0)
 
-            if(filterData[index].shipType != ""
-                && filterData[index].weight != ""
-                && filterData[index].homePort != ""){
+            if(filterData[index].shipType 
+                && filterData[index].weight
+                && filterData[index].homePort){
                 //Row entry should be less than what is returned by the API
                 this.tableRow.should('have.length.below', 20) 
                 this.verifyRow(index)
