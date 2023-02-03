@@ -1,5 +1,6 @@
 import { data } from "cypress/types/jquery";
 import filterData from "../../fixtures/filterdata.json";
+import { filter } from "cypress/types/bluebird";
 
 
 class FlightDashboard{
@@ -105,9 +106,6 @@ class FlightDashboard{
                 ) //** Enter Filters based on json file data*/
             
             this.searchButton.click() //** Click Search button */
-            this.table.should('be.visible')
-            cy.wait(500) //TODO: Ensure the table already loads remove cy.wait
-        
             this.verifyValidity(datarow.valid, index) //** Check if expected is valid */
         })
     }
@@ -153,13 +151,24 @@ class FlightDashboard{
         if(valid === 1){
             this.alertIcon.should('not.exist')
             this.table.should('be.visible')  
-            this.verifyRow(index)
+            this.tableRow.should('have.length.greaterThan', 0)
+
+            if(filterData[index].shipType != ""
+                && filterData[index].weight != ""
+                && filterData[index].homePort != ""){
+                //Row entry should be less than what is returned by the API
+                this.tableRow.should('have.length.below', 20) 
+                this.verifyRow(index)
+            }
+            
         }
         else{
             this.alertIcon.should('be.visible')
             this.table.should('not.exist')
         }
     }
+
+
 
     /**
      * Compares the value of the text of the cell to the expected value.
