@@ -159,6 +159,9 @@ class FlightDashboard{
                 this.tableRow.should('have.length.below', 20) 
                 this.verifyRow(index)
             }
+            else{
+                this.tableRow.should('have.length', 20)
+            }
         }
         else{
             this.alertIcon.should('be.visible')
