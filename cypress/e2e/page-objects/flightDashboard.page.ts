@@ -1,6 +1,5 @@
-import { data } from "cypress/types/jquery";
 import filterData from "../../fixtures/filterdata.json";
-import { filter } from "cypress/types/bluebird";
+
 
 
 class FlightDashboard{
@@ -120,7 +119,7 @@ class FlightDashboard{
      */
     enterFilterData = (
         shipType: string,
-        weight: string,
+        weight: string, //TODO: Should be a number
         homePort: string
     ) => {
         if(shipType) {
@@ -154,20 +153,18 @@ class FlightDashboard{
             this.tableRow.should('have.length.greaterThan', 0)
 
             if(filterData[index].shipType 
-                && filterData[index].weight
-                && filterData[index].homePort){
+                || filterData[index].weight
+                || filterData[index].homePort){
                 //Row entry should be less than what is returned by the API
                 this.tableRow.should('have.length.below', 20) 
                 this.verifyRow(index)
             }
-            
         }
         else{
             this.alertIcon.should('be.visible')
             this.table.should('not.exist')
         }
     }
-
 
 
     /**
